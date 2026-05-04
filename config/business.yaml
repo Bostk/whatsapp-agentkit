@@ -1,0 +1,35 @@
+# Configuración del negocio — Generado por AgentKit
+negocio:
+  nombre: "Transportes Arroyo"
+  descripcion: >
+    Empresa de logística y transporte de carga que opera en el eje Santiago - Concepción - Puerto Montt.
+    Servicios principales: mudanzas y fletes particulares (muebles, sofás, enseres del hogar) para
+    personas y empresas. Modelo de negocio en crecimiento: traslado B2B de muebles y sofás para
+    empresas fabricantes que necesitan despachar desde Puerto Montt hacia Santiago u otras ciudades,
+    operando con factura para clientes empresariales.
+  rutas:
+    - "Santiago ↔ Concepción"
+    - "Concepción ↔ Puerto Montt"
+    - "Santiago ↔ Puerto Montt"
+  servicios:
+    - "Mudanzas residenciales"
+    - "Fletes particulares"
+    - "Traslado de muebles y sofás"
+    - "Logística B2B para fabricantes de muebles"
+    - "Despacho con factura para empresas"
+  clientes_objetivo:
+    - "Personas naturales que necesitan mudanza o flete"
+    - "Empresas fabricantes de muebles y sofás (foco principal de crecimiento)"
+  horario: "Lunes a Domingo, 8:00am a 10:30pm"
+
+agente:
+  nombre: "Asistente WhatsApp"
+  tono: "Vendedor, persuasivo y empático"
+  casos_de_uso:
+    - "Responder preguntas frecuentes sobre rutas, servicios y condiciones"
+    - "Agendar coordinaciones y visitas para cotizaciones"
+    - "Calificar y atender leads B2B (fabricantes de muebles/sofás)"
+
+metadata:
+  creado: "2026-05-04"
+  version: "1.0"
