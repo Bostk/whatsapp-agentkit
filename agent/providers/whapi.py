@@ -76,10 +76,10 @@ class ProveedorWhapi(ProveedorWhatsApp):
         Descarga el audio desde Whapi y lo transcribe con OpenAI Whisper.
         Retorna el texto transcrito, o "" si falla.
         """
-        # Loguear estructura completa del mensaje para diagnóstico
+        # El MediaID para Whapi está dentro del objeto audio/voice, NO en el id del mensaje
         audio_data = msg.get("audio") or msg.get("voice") or {}
-        media_id = msg.get("id", "")
-        logger.info(f"Audio msg tipo={msg.get('type')} id={media_id} audio_data={audio_data}")
+        media_id = audio_data.get("id", "")  # ej: "oga-a5328e2c...-85631b..."
+        logger.info(f"Audio msg tipo={msg.get('type')} media_id={media_id} audio_data={audio_data}")
 
         if not media_id:
             logger.warning("Audio recibido sin media_id — no se puede descargar")
