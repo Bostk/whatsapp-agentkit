@@ -65,7 +65,7 @@ async def webhook_handler(request: Request):
         mensajes = await proveedor.parsear_webhook(request)
 
         for msg in mensajes:
-            if msg.es_propio or not msg.texto:
+            if msg.es_propio or not msg.texto or "@g.us" in msg.telefono:
                 continue
 
             logger.info(f"Mensaje de {msg.telefono}: {msg.texto}")
