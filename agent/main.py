@@ -14,6 +14,14 @@ from agent.providers import obtener_proveedor
 
 load_dotenv()
 
+PALABRAS_CLAVE = [
+    'mudanza', 'traslado', 'flete', 'transporte', 'mueble', 'sofa', 'sofá',
+    'camion', 'camión', 'precio', 'cotizacion', 'cotización', 'costo',
+    'cuanto', 'cuánto', 'informacion', 'información', 'info',
+    'hola', 'buenas', 'buenos', 'quiero', 'necesito', 'ayuda',
+    'servicio', 'despacho', 'carga', 'articulo', 'artículo'
+]
+
 ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 log_level = logging.DEBUG if ENVIRONMENT == "development" else logging.INFO
 logging.basicConfig(level=log_level)
@@ -68,10 +76,16 @@ async def webhook_handler(request: Request):
             if msg.es_propio or not msg.texto or "@g.us" in msg.telefono:
                 continue
 
-            logger.info(f"Mensaje de {msg.telefono}: {msg.texto}")
-
             # Obtener historial ANTES de guardar el mensaje actual
             historial = await obtener_historial(msg.telefono)
+
+            # Filtro: responder solo si hay conversación previa o el mensaje tiene palabras clave
+            tiene_clave = any(p in msg.texto.lower() for p in PALABRAS_CLAVE)
+            if not historial and not tiene_clave:
+                logger.debug(f"Ignorado (sin palabras clave): {msg.telefono}: {msg.texto}")
+                continue
+
+            logger.info(f"Mensaje de {msg.telefono}: {msg.texto}")
 
             # Generar respuesta con Claude
             respuesta = await generar_respuesta(msg.texto, historial)
