@@ -87,8 +87,8 @@ async def webhook_handler(request: Request):
 
             logger.info(f"Mensaje de {msg.telefono}: {msg.texto}")
 
-            # Generar respuesta con Claude
-            respuesta = await generar_respuesta(msg.texto, historial)
+            # Generar respuesta con Claude (pasamos teléfono para alertas al dueño)
+            respuesta = await generar_respuesta(msg.texto, historial, telefono_cliente=msg.telefono)
 
             # Guardar en memoria
             await guardar_mensaje(msg.telefono, "user", msg.texto)
