@@ -22,6 +22,13 @@ PALABRAS_CLAVE = [
     'servicio', 'despacho', 'carga', 'articulo', 'artículo'
 ]
 
+# Contactos VIP: cuando escriben, Leonardo recibe notificación inmediata
+# con el contenido del mensaje, sin necesidad de que pidan hablar con alguien.
+# Formato: número sin + ni espacios (ej: 56912345678)
+CONTACTOS_VIP = set(
+    c.strip() for c in os.getenv("CONTACTOS_VIP", "56951685646").split(",") if c.strip()
+)
+
 ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 log_level = logging.DEBUG if ENVIRONMENT == "development" else logging.INFO
 logging.basicConfig(level=log_level)
@@ -95,6 +102,17 @@ async def webhook_handler(request: Request):
                 continue
 
             logger.info(f"Mensaje de {msg.telefono}: {msg.texto}")
+
+            # Notificación VIP: si el remitente está en la lista, alertar a Leonardo
+            numero_limpio = msg.telefono.replace("@s.whatsapp.net", "").replace("+", "")
+            if numero_limpio in CONTACTOS_VIP:
+                from agent.tools import notificar_dueno
+                await notificar_dueno(
+                    nombre_cliente="Cristóbal (contacto VIP)",
+                    telefono_cliente=numero_limpio,
+                    motivo=f"Mensaje recibido: {msg.texto[:200]}"
+                )
+                logger.info(f"Notificación VIP enviada para {numero_limpio}")
 
             # Generar respuesta con Claude (texto, imagen si aplica, y teléfono para alertas)
             respuesta = await generar_respuesta(
