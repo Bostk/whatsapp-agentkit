@@ -56,10 +56,48 @@ def cargar_config_prompts() -> dict:
         return {}
 
 
+def cargar_knowledge() -> str:
+    """
+    Lee los archivos de conocimiento de la carpeta /knowledge y los devuelve
+    como texto adicional para incluir en el system prompt.
+    Solo carga archivos .txt — sin datos personales (chats exportados se excluyen por .gitignore).
+    """
+    archivos_permitidos = ["conversaciones_ejemplo.txt", "estilo_leonardo.txt"]
+    knowledge_dir = "knowledge"
+    secciones = []
+
+    for nombre in archivos_permitidos:
+        ruta = os.path.join(knowledge_dir, nombre)
+        if not os.path.exists(ruta):
+            continue
+        try:
+            with open(ruta, "r", encoding="utf-8") as f:
+                contenido = f.read().strip()
+            if contenido:
+                secciones.append(f"### {nombre}\n{contenido}")
+                logger.debug(f"Knowledge cargado: {nombre} ({len(contenido)} chars)")
+        except Exception as e:
+            logger.warning(f"No se pudo leer {nombre}: {e}")
+
+    if not secciones:
+        return ""
+
+    return (
+        "\n\n---\n"
+        "## Material de referencia — Conversaciones reales y estilo de venta\n"
+        "Usa estos ejemplos para calibrar exactamente el tono, las frases y el flujo "
+        "de ventas que funciona con los clientes de Transportes Arroyo. "
+        "NO los repitas literalmente, pero sí aprende el estilo.\n\n"
+        + "\n\n".join(secciones)
+    )
+
+
 def cargar_system_prompt() -> str:
-    """Lee el system prompt desde config/prompts.yaml."""
+    """Lee el system prompt desde config/prompts.yaml y añade el knowledge base."""
     config = cargar_config_prompts()
-    return config.get("system_prompt", "Eres un asistente útil. Responde en español.")
+    base = config.get("system_prompt", "Eres un asistente útil. Responde en español.")
+    knowledge = cargar_knowledge()
+    return base + knowledge
 
 
 def obtener_mensaje_error() -> str:

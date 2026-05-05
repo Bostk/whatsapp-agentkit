@@ -18,8 +18,12 @@ dist/
 build/
 
 # Knowledge (archivos privados del negocio)
+# Los chats originales exportados de WhatsApp NO van a GitHub (datos personales)
 knowledge/*
 !knowledge/.gitkeep
+# Archivos de ejemplo anonimizados — SÍ van a GitHub (sin datos personales)
+!knowledge/conversaciones_ejemplo.txt
+!knowledge/estilo_leonardo.txt
 
 # Session state
 config/session.yaml

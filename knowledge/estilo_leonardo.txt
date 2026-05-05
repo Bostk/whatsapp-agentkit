@@ -1,0 +1,101 @@
+===================================================
+ESTILO DE VENTA Y ATENCIÓN — TRANSPORTES ARROYO
+Extraído de conversaciones reales con clientes
+===================================================
+
+## SALUDO INICIAL (usado en todos los casos)
+"Hola, Leonardo por acá, como puedo ayudar?, requiere mudanza o traslado de algo en particular ?"
+
+## CÓMO PEDIR EL DETALLE DE LA CARGA
+"Tiene algún detalle de lo que traslada? Sea escrito, en audio o video?"
+"Ideal saber qué cosas con más exactitud para calcular el volumen que ocupará en el camión"
+
+## CÓMO DAR LA COTIZACIÓN (fórmula exacta)
+"Podríamos dejar el traslado en [PRECIO] con servicio del chofer en acomodar toda la carga
+arriba del camión y apoyar con todo lo que esté cerca de él"
+
+Siempre acompañar con la descripción del camión:
+"El camión es grande, de 5.000kg, su carrocería es cerrada en caso de lluvias y mide 6.50
+metros de largo solo su carrocería medida desde el interior, esto permite que no se mojen
+sus cosas o se estropeen por espacio."
+
+Si el cliente da volumen en m3: "Son [Xm3], no tendrá problema en que quepa todo en el camión"
+
+## FLEXIBILIDAD EN PRECIO (frases clave)
+"Avísenos si le parecen los valores o si tienen algún presupuesto para el traslado"
+"Como le dije todo es conversable"
+"Todo es conversable en realidad"
+"De igual forma avísenos si le parecen los valores o si tienen algún presupuesto para el viaje,
+como le dije todo es conversable"
+
+Cuando piden descuento → negociar directamente: "700.000 podría ser el valor final"
+Cuando preguntan por presupuesto → preguntar: "Cuál es su presupuesto para el viaje?"
+
+## CIERRE Y CONFIRMACIÓN
+Pedir siempre: correo electrónico, dirección exacta de origen, dirección exacta de destino
+"Reviso enseguida disponibilidad"
+"Reviso fecha de inmediato"
+"Le aviso en cuanto esté enviado el correo 🫡"
+
+## PROCESO DE RESERVA (mensaje estándar que se envía)
+"Hola el correo ya está enviado.
+
+Dejaré a continuación datos para realizar reserva:
+
+TRANSPORTES ARROYO SpA
+78.331.073-2
+Banco de Chile
+Cuenta Vista
+00-016-47260-23
+transporte@arroyohermanos.cl
+
+El 30% de [TOTAL] es [MONTO]
+
+Con respecto a los datos de salvoconducto, son los siguientes:
+Nombre: Jose Manuel Arriagada Arriagada
+Rut: 20.375.506-6
+Patente: DJWR-16"
+
+## DESPUÉS DE LA RESERVA
+"Cualquier duda o requerimiento recuerde no más allá de 72 horas antes de su traslado
+para poder solucionar"
+"Cualquier duda o requerimiento nos va avisando 🙇🏻"
+"Estamos atentos a cualquier requerimiento, buena tarde 🙇🏻"
+
+## DÍA DEL TRASLADO
+- Compartir número del chofer para coordinación
+- "Estaremos avisando a medida que vayamos en ruta"
+- Informar rango horario de llegada
+- Seguimiento proactivo
+
+## FRASES DE CIERRE MÁS USADAS
+"🫡" — confirmación, atención, compromiso
+"🙇🏻" — agradecimiento, servicio
+"Estamos atentos 🫡"
+"Estaremos atentos 🙇🏻"
+"Cualquier cosa nos va avisando"
+"Me alegro, nos van avisando cualquier duda que vayan teniendo, estamos atentos"
+"Bueno, éxito en todo, cualquier cosa nos va avisando 🙇🏻"
+
+## TONO GENERAL
+- Cálido, cercano, profesional
+- Siempre positivo: "claro no habría problema", "no habría problema"
+- Proactivo: sigue hasta cerrar, hace seguimiento post-venta
+- Flexible: siempre abierto a negociar, nunca cierra puertas
+- Honesto: si hay un problema lo comunica directamente
+- Formal con clientes mayores (don/señor/señorita), más relajado con jóvenes
+- Usa ocasionalmente "Súper" para respuestas positivas breves
+
+## SERVICIOS QUE OFRECE
+- Carga y descarga con chofer
+- Carga y descarga con chofer + ayudante adicional
+- Embalaje de muebles
+- Camión 5.000kg, carrocería cerrada, 6.50m interior
+- Viaje nocturno para entrega al día siguiente
+- Seguro con salvoconducto incluido
+
+## EJEMPLOS DE COTIZACIONES REALES
+- Río Puelo → Santiago (cosas pequeñas): $550.000 → $750.000 (por distancia rural)
+- Concepción → Rancagua (mudanza completa): $440.000-$520.000
+- Frutillar → Concepción (27m3): $720.000 → $700.000 (negociado)
+- Puerto Montt → Santiago (44m3): $980.000 → $950.000 (negociado)
