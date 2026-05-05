@@ -76,9 +76,10 @@ class ProveedorWhapi(ProveedorWhatsApp):
         Descarga el audio desde Whapi y lo transcribe con OpenAI Whisper.
         Retorna el texto transcrito, o "" si falla.
         """
-        # En Whapi, el endpoint de descarga usa el ID del mensaje completo
+        # Loguear estructura completa del mensaje para diagnóstico
         audio_data = msg.get("audio") or msg.get("voice") or {}
-        media_id = msg.get("id", "")  # ID del mensaje, no del campo audio
+        media_id = msg.get("id", "")
+        logger.info(f"Audio msg tipo={msg.get('type')} id={media_id} audio_data={audio_data}")
 
         if not media_id:
             logger.warning("Audio recibido sin media_id — no se puede descargar")
@@ -91,40 +92,58 @@ class ProveedorWhapi(ProveedorWhatsApp):
         headers_whapi = {"Authorization": f"Bearer {self.token}"}
 
         try:
-            # 1. Descargar el audio desde Whapi
+            # 1. Intentar descargar con el ID del mensaje
+            url_descarga = f"{self.url_media}/{media_id}"
+            logger.info(f"Descargando audio desde: {url_descarga}")
+
             async with httpx.AsyncClient(timeout=30) as client:
-                r = await client.get(
-                    f"{self.url_media}/{media_id}",
-                    headers=headers_whapi
-                )
+                r = await client.get(url_descarga, headers=headers_whapi)
+                logger.info(f"Respuesta Whapi media: status={r.status_code} content-type={r.headers.get('content-type')} size={len(r.content)}")
+
                 if r.status_code != 200:
-                    logger.error(f"Error descargando audio de Whapi: {r.status_code}")
+                    logger.error(f"Error descargando audio: {r.status_code} — {r.text[:200]}")
                     return ""
                 audio_bytes = r.content
 
-            logger.info(f"Audio descargado: {len(audio_bytes)} bytes")
+            # 2. Determinar MIME type del audio
+            content_type = r.headers.get("content-type", "audio/ogg")
+            if "ogg" in content_type or "opus" in content_type:
+                mime_audio = "audio/ogg"
+                ext = "ogg"
+            elif "mp4" in content_type or "m4a" in content_type:
+                mime_audio = "audio/mp4"
+                ext = "mp4"
+            elif "mpeg" in content_type or "mp3" in content_type:
+                mime_audio = "audio/mpeg"
+                ext = "mp3"
+            else:
+                mime_audio = "audio/ogg"
+                ext = "ogg"
 
-            # 2. Enviar a OpenAI Whisper para transcripción
+            logger.info(f"Audio descargado: {len(audio_bytes)} bytes, mime={mime_audio}")
+
+            # 3. Enviar a OpenAI Whisper para transcripción
             async with httpx.AsyncClient(timeout=60) as client:
                 r = await client.post(
                     "https://api.openai.com/v1/audio/transcriptions",
                     headers={"Authorization": f"Bearer {self.openai_key}"},
                     files={
-                        "file": ("audio.ogg", io.BytesIO(audio_bytes), "audio/ogg"),
+                        "file": (f"audio.{ext}", io.BytesIO(audio_bytes), mime_audio),
                         "model": (None, "whisper-1"),
                         "language": (None, "es"),
                     }
                 )
+                logger.info(f"Respuesta Whisper: status={r.status_code}")
                 if r.status_code != 200:
-                    logger.error(f"Error Whisper API: {r.status_code} — {r.text}")
+                    logger.error(f"Error Whisper API: {r.status_code} — {r.text[:200]}")
                     return ""
 
                 transcripcion = r.json().get("text", "").strip()
-                logger.info(f"Audio transcrito: {transcripcion[:100]}")
+                logger.info(f"Audio transcrito OK: {transcripcion[:100]}")
                 return transcripcion
 
         except Exception as e:
-            logger.error(f"Error transcribiendo audio: {e}")
+            logger.error(f"Error transcribiendo audio: {e}", exc_info=True)
             return ""
 
     async def _descargar_imagen(self, msg: dict) -> tuple[str, str, str]:
