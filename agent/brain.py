@@ -110,14 +110,22 @@ def obtener_mensaje_fallback() -> str:
     return config.get("fallback_message", "Disculpa, no entendí su mensaje. ¿Podría repetirlo?")
 
 
-async def generar_respuesta(mensaje: str, historial: list[dict], telefono_cliente: str = "") -> str:
+async def generar_respuesta(
+    mensaje: str,
+    historial: list[dict],
+    telefono_cliente: str = "",
+    imagen_base64: str = "",
+    imagen_mime: str = ""
+) -> str:
     """
-    Genera una respuesta usando Claude API con soporte de herramientas (tool use).
+    Genera una respuesta usando Claude API con soporte de herramientas y visión.
 
     Args:
-        mensaje: El mensaje nuevo del usuario
+        mensaje: El mensaje nuevo del usuario (o transcripción de audio)
         historial: Lista de mensajes anteriores [{"role": "user/assistant", "content": "..."}]
         telefono_cliente: Número del cliente para incluir en alertas
+        imagen_base64: Imagen en base64 si el cliente mandó una foto
+        imagen_mime: MIME type de la imagen (image/jpeg, image/png, etc.)
 
     Returns:
         La respuesta generada por Claude
@@ -127,10 +135,32 @@ async def generar_respuesta(mensaje: str, historial: list[dict], telefono_client
 
     system_prompt = cargar_system_prompt()
 
+    # Historial previo (solo texto — las imágenes no se guardan en memoria)
     mensajes = []
     for msg in historial:
         mensajes.append({"role": msg["role"], "content": msg["content"]})
-    mensajes.append({"role": "user", "content": mensaje})
+
+    # Mensaje actual — puede ser texto solo o texto + imagen
+    if imagen_base64 and imagen_mime:
+        # Mensaje multimodal: Claude ve la imagen y el texto juntos
+        contenido_usuario = [
+            {
+                "type": "image",
+                "source": {
+                    "type": "base64",
+                    "media_type": imagen_mime,
+                    "data": imagen_base64,
+                }
+            },
+            {
+                "type": "text",
+                "text": mensaje or "El cliente envió esta foto. Analízala en el contexto del servicio de mudanzas."
+            }
+        ]
+    else:
+        contenido_usuario = mensaje
+
+    mensajes.append({"role": "user", "content": contenido_usuario})
 
     try:
         response = await client.messages.create(

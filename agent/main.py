@@ -76,6 +76,15 @@ async def webhook_handler(request: Request):
             if msg.es_propio or not msg.texto or "@g.us" in msg.telefono:
                 continue
 
+            # Audio que llegó pero no se pudo transcribir (sin API key de OpenAI)
+            if msg.texto == "__audio_sin_transcripcion__":
+                await proveedor.enviar_mensaje(
+                    msg.telefono,
+                    "Recibí su audio, pero por el momento solo proceso mensajes de texto. "
+                    "¿Podría escribirme lo que necesita?"
+                )
+                continue
+
             # Obtener historial ANTES de guardar el mensaje actual
             historial = await obtener_historial(msg.telefono)
 
@@ -87,12 +96,20 @@ async def webhook_handler(request: Request):
 
             logger.info(f"Mensaje de {msg.telefono}: {msg.texto}")
 
-            # Generar respuesta con Claude (pasamos teléfono para alertas al dueño)
-            respuesta = await generar_respuesta(msg.texto, historial, telefono_cliente=msg.telefono)
+            # Generar respuesta con Claude (texto, imagen si aplica, y teléfono para alertas)
+            respuesta = await generar_respuesta(
+                msg.texto,
+                historial,
+                telefono_cliente=msg.telefono,
+                imagen_base64=msg.imagen_base64,
+                imagen_mime=msg.imagen_mime,
+            )
 
-            # Guardar en memoria
-            await guardar_mensaje(msg.telefono, "user", msg.texto)
+            # En memoria guardamos el texto (o una descripción si era imagen)
+            texto_memoria = msg.texto if not msg.imagen_base64 else f"[Imagen] {msg.texto}"
+            await guardar_mensaje(msg.telefono, "user", texto_memoria)
             await guardar_mensaje(msg.telefono, "assistant", respuesta)
+
 
             # Enviar respuesta por WhatsApp
             await proveedor.enviar_mensaje(msg.telefono, respuesta)

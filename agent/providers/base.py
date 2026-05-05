@@ -13,6 +13,9 @@ class MensajeEntrante:
     texto: str
     mensaje_id: str
     es_propio: bool
+    # Campos opcionales para mensajes multimedia
+    imagen_base64: str = ""   # Imagen en base64 (si el cliente mandó foto)
+    imagen_mime: str = ""     # MIME type: image/jpeg, image/png, etc.
 
 
 class ProveedorWhatsApp(ABC):
